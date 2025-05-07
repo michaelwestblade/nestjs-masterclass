@@ -15,6 +15,11 @@ export class UsersController {
     return 'Hello from users';
   }
 
+  @Get('/:id')
+  getUser(@Param('id') id: string) {
+    return `User with ID ${id}`;
+  }
+
   @Post()
   createUsers() {
     return 'you created a user';
