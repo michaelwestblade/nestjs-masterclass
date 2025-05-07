@@ -30,8 +30,8 @@ export class UsersController {
   }
 
   @Post()
-  createUsers(@Body(new ValidationPipe()) request: CreateUserDto) {
-    return `You made a user with ${request.firstName} ${request.lastName} ${request.email} ${request.password}`;
+  createUsers(@Body(new ValidationPipe()) userDto: CreateUserDto) {
+    return `You made a user with ${userDto.firstName} ${userDto.lastName} ${userDto.email} ${userDto.password}`;
   }
 
   @Patch(':id')
