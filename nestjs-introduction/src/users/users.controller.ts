@@ -8,11 +8,11 @@ import {
   Param,
   Query,
   Body,
-  Headers,
-  Ip,
   ParseIntPipe,
   DefaultValuePipe,
+  ValidationPipe,
 } from '@nestjs/common';
+import { CreateUserDto } from './dtos/create-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -30,8 +30,8 @@ export class UsersController {
   }
 
   @Post()
-  createUsers(@Body() request, @Headers() headers, @Ip() ip) {
-    return `you created a user with request body ${JSON.stringify(request)} and headers ${JSON.stringify(headers)} from ip ${ip}`;
+  createUsers(@Body(new ValidationPipe()) request: CreateUserDto) {
+    return `You made a user with ${request.firstName} ${request.lastName} ${request.email} ${request.password}`;
   }
 
   @Patch(':id')
