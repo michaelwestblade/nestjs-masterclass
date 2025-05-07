@@ -12,6 +12,8 @@ import {
   DefaultValuePipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { GetUserDto } from './dtos/get-user.dto';
+import { PatchUserDto } from './dtos/patch-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -24,8 +26,8 @@ export class UsersController {
   }
 
   @Get('/:id')
-  getUser(@Param('id', ParseIntPipe) id: number) {
-    return `User with ID ${id}`;
+  getUser(@Param() getUserDto: GetUserDto) {
+    return `User with ID ${getUserDto.id}`;
   }
 
   @Post()
@@ -34,8 +36,8 @@ export class UsersController {
   }
 
   @Patch(':id')
-  patchUser(@Param('id') id: string) {
-    return `You patched a user with ID ${id}`;
+  patchUser(@Param('id') id: string, @Body() patchUserDto: PatchUserDto) {
+    return `You patched a user with ID ${id} with values ${JSON.stringify(patchUserDto)}`;
   }
 
   @Put(':id')
