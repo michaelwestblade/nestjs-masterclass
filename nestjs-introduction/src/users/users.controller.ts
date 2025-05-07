@@ -6,13 +6,15 @@ import {
   Put,
   Delete,
   Param,
+  Query,
+  Body,
 } from '@nestjs/common';
 
 @Controller('users')
 export class UsersController {
   @Get()
-  getUsers() {
-    return 'Hello from users';
+  getUsers(@Query() params) {
+    return `Hello from users with params ${Object.keys(params).join(', ')}`;
   }
 
   @Get('/:id')
@@ -21,8 +23,8 @@ export class UsersController {
   }
 
   @Post()
-  createUsers() {
-    return 'you created a user';
+  createUsers(@Body() request) {
+    return `you created a user with request body ${JSON.stringify(request)}`;
   }
 
   @Patch(':id')

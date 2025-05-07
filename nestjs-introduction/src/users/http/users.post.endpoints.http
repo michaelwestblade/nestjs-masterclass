@@ -1,4 +1,10 @@
 POST http://localhost:3000/users
-Accept: application/json
+Content-Type: application/json
 
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "wahtever@this.net",
+  "password": "test123"
+}
 ###
