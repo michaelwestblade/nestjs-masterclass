@@ -1,4 +1,4 @@
-GET http://localhost:3000/users?test=true&one=two
+GET http://localhost:3000/users?limit=20&page=1
 Accept: application/json
 
 ###

@@ -10,17 +10,22 @@ import {
   Body,
   Headers,
   Ip,
+  ParseIntPipe,
+  DefaultValuePipe,
 } from '@nestjs/common';
 
 @Controller('users')
 export class UsersController {
   @Get()
-  getUsers(@Query() params) {
-    return `Hello from users with params ${Object.keys(params).join(', ')}`;
+  getUsers(
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+  ) {
+    return `Hello from users with params limit: ${limit} and page: ${page}\n`;
   }
 
   @Get('/:id')
-  getUser(@Param('id') id: string) {
+  getUser(@Param('id', ParseIntPipe) id: number) {
     return `User with ID ${id}`;
   }
 
