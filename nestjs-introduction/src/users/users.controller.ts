@@ -10,7 +10,6 @@ import {
   Body,
   ParseIntPipe,
   DefaultValuePipe,
-  ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 
@@ -30,7 +29,7 @@ export class UsersController {
   }
 
   @Post()
-  createUsers(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
+  createUsers(@Body() createUserDto: CreateUserDto) {
     return `You made a user with ${createUserDto.firstName} ${createUserDto.lastName} ${createUserDto.email} ${createUserDto.password}`;
   }
 
