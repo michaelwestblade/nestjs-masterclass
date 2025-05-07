@@ -8,6 +8,8 @@ import {
   Param,
   Query,
   Body,
+  Headers,
+  Ip,
 } from '@nestjs/common';
 
 @Controller('users')
@@ -23,8 +25,8 @@ export class UsersController {
   }
 
   @Post()
-  createUsers(@Body() request) {
-    return `you created a user with request body ${JSON.stringify(request)}`;
+  createUsers(@Body() request, @Headers() headers, @Ip() ip) {
+    return `you created a user with request body ${JSON.stringify(request)} and headers ${JSON.stringify(headers)} from ip ${ip}`;
   }
 
   @Patch(':id')
