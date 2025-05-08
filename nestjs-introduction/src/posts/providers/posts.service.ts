@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GetPostsDto } from '../dtos/get-posts.dto';
 import { GetPostDto } from '../dtos/get-post.dto';
 import { UsersService } from '../../users/providers/users.service';
+import { CreatePostDto } from '../dtos/create-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -22,6 +23,13 @@ export class PostsService {
   }
 
   findOne(getPostDto: GetPostDto) {
+    return {
+      title: 'Test Title',
+      content: 'lorem ipsum',
+    };
+  }
+
+  createOne(createPostDto: CreatePostDto) {
     return {
       title: 'Test Title',
       content: 'lorem ipsum',
