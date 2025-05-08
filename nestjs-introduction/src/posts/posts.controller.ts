@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -49,10 +51,23 @@ export class PostsController {
     name: 'id',
     description: 'id of the post to update',
   })
+  @ApiResponse({
+    status: 200,
+    description: 'post was updated successfully',
+  })
   public updatedPost(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() patchPostDto: PatchPostDto,
   ) {
     return this.postService.updatePost(id, patchPostDto);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'post was deleted successfully',
+  })
+  @Delete(':id')
+  public deletePost(@Param('id', ParseIntPipe) id: number) {
+    return this.postService.deletePost(id);
   }
 }

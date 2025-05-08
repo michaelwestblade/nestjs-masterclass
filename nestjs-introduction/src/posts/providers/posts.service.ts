@@ -37,10 +37,14 @@ export class PostsService {
     };
   }
 
-  updatePost(id: string, patchPostDto: PatchPostDto) {
+  updatePost(id: number, patchPostDto: PatchPostDto) {
     return {
       title: 'Test Title',
       content: 'lorem ipsum',
     };
+  }
+
+  deletePost(id: number) {
+    return true;
   }
 }
