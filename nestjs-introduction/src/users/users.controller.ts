@@ -14,9 +14,12 @@ import {
 import { CreateUserDto } from './dtos/create-user.dto';
 import { GetUserDto } from './dtos/get-user.dto';
 import { PatchUserDto } from './dtos/patch-user.dto';
+import { UsersService } from './providers/users.service';
 
 @Controller('users')
 export class UsersController {
+  constructor(private readonly userService: UsersService) {}
+
   @Get()
   getUsers(
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
