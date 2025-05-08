@@ -219,14 +219,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="45"
-                                    class="link-to-prism">src/posts/posts.controller.ts:45</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="57"
+                                    class="link-to-prism">src/posts/posts.controller.ts:57</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>create a post</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -297,14 +299,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="70"
-                                    class="link-to-prism">src/posts/posts.controller.ts:70</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="91"
+                                    class="link-to-prism">src/posts/posts.controller.ts:91</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>delete a post by id</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -374,14 +378,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="35"
-                                    class="link-to-prism">src/posts/posts.controller.ts:35</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="43"
+                                    class="link-to-prism">src/posts/posts.controller.ts:43</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>get a single post by ID</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -451,14 +457,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="30"
-                                    class="link-to-prism">src/posts/posts.controller.ts:30</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="34"
+                                    class="link-to-prism">src/posts/posts.controller.ts:34</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>get all posts with filters</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -530,14 +538,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="58"
-                                    class="link-to-prism">src/posts/posts.controller.ts:58</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="75"
+                                    class="link-to-prism">src/posts/posts.controller.ts:75</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>update a post by ID</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -621,16 +631,28 @@ import { PatchPostDto } from &#x27;./dtos/patch-post.dto&#x27;;
 export class PostsController {
   constructor(private readonly postService: PostsService) {}
 
+  /**
+   * get all posts with filters
+   * @param getPostsDto
+   */
   @Get()
   public getPosts(@Query() getPostsDto: GetPostsDto) {
     return this.postService.findAll(getPostsDto);
   }
 
+  /**
+   * get a single post by ID
+   * @param getPostDto
+   */
   @Get(&#x27;:id&#x27;)
   public getPost(@Param() getPostDto: GetPostDto) {
     return this.postService.findOne(getPostDto);
   }
 
+  /**
+   * create a post
+   * @param createPostDto
+   */
   @ApiOperation({ summary: &#x27;Create post&#x27; })
   @ApiResponse({
     status: 201,
@@ -641,6 +663,11 @@ export class PostsController {
     return this.postService.createOne(createPostDto);
   }
 
+  /**
+   * update a post by ID
+   * @param id
+   * @param patchPostDto
+   */
   @Patch(&#x27;:id&#x27;)
   @ApiProperty({
     name: &#x27;id&#x27;,
@@ -657,6 +684,10 @@ export class PostsController {
     return this.postService.updatePost(id, patchPostDto);
   }
 
+  /**
+   * delete a post by id
+   * @param id
+   */
   @ApiResponse({
     status: 200,
     description: &#x27;post was deleted successfully&#x27;,

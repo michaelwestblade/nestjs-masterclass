@@ -32,6 +32,18 @@
 <title>cluster_AppModule_providers</title>
 <polygon fill="none" stroke="black" points="176,-154 176,-206 306,-206 306,-154 176,-154"/>
 </g>
+<g id="clust19" class="cluster">
+<title>cluster_UsersModule</title>
+<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="815,-146 815,-214 1089,-214 1089,-146 815,-146"/>
+</g>
+<g id="clust22" class="cluster">
+<title>cluster_UsersModule_exports</title>
+<polygon fill="none" stroke="black" points="971,-154 971,-206 1081,-206 1081,-154 971,-154"/>
+</g>
+<g id="clust24" class="cluster">
+<title>cluster_UsersModule_providers</title>
+<polygon fill="none" stroke="black" points="823,-154 823,-206 963,-206 963,-154 823,-154"/>
+</g>
 <g id="clust7" class="cluster">
 <title>cluster_AuthModule</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="543,-146 543,-214 807,-214 807,-146 543,-146"/>
@@ -51,18 +63,6 @@
 <g id="clust18" class="cluster">
 <title>cluster_PostsModule_providers</title>
 <polygon fill="none" stroke="black" points="16,-78 16,-130 152,-130 152,-78 16,-78"/>
-</g>
-<g id="clust19" class="cluster">
-<title>cluster_UsersModule</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="815,-146 815,-214 1089,-214 1089,-146 815,-146"/>
-</g>
-<g id="clust22" class="cluster">
-<title>cluster_UsersModule_exports</title>
-<polygon fill="none" stroke="black" points="971,-154 971,-206 1081,-206 1081,-154 971,-154"/>
-</g>
-<g id="clust24" class="cluster">
-<title>cluster_UsersModule_providers</title>
-<polygon fill="none" stroke="black" points="823,-154 823,-206 963,-206 963,-154 823,-154"/>
 </g>
 <!-- AuthModule -->
 <g id="node1" class="node">

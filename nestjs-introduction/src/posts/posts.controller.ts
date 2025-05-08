@@ -26,16 +26,28 @@ import { PatchPostDto } from './dtos/patch-post.dto';
 export class PostsController {
   constructor(private readonly postService: PostsService) {}
 
+  /**
+   * get all posts with filters
+   * @param getPostsDto
+   */
   @Get()
   public getPosts(@Query() getPostsDto: GetPostsDto) {
     return this.postService.findAll(getPostsDto);
   }
 
+  /**
+   * get a single post by ID
+   * @param getPostDto
+   */
   @Get(':id')
   public getPost(@Param() getPostDto: GetPostDto) {
     return this.postService.findOne(getPostDto);
   }
 
+  /**
+   * create a post
+   * @param createPostDto
+   */
   @ApiOperation({ summary: 'Create post' })
   @ApiResponse({
     status: 201,
@@ -46,6 +58,11 @@ export class PostsController {
     return this.postService.createOne(createPostDto);
   }
 
+  /**
+   * update a post by ID
+   * @param id
+   * @param patchPostDto
+   */
   @Patch(':id')
   @ApiProperty({
     name: 'id',
@@ -62,6 +79,10 @@ export class PostsController {
     return this.postService.updatePost(id, patchPostDto);
   }
 
+  /**
+   * delete a post by id
+   * @param id
+   */
   @ApiResponse({
     status: 200,
     description: 'post was deleted successfully',

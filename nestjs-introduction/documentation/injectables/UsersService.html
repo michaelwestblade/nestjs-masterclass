@@ -176,6 +176,8 @@
 
                 <tr>
                     <td class="col-md-4">
+                            <div class="io-description"><p>constructor</p>
+</div>
                             <div>
                                     <b>Parameters :</b>
                                     <table class="params">
@@ -233,14 +235,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="40"
-                                    class="link-to-prism">src/users/providers/users.service.ts:40</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="57"
+                                    class="link-to-prism">src/users/providers/users.service.ts:57</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>create a user</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -300,14 +304,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="14"
-                                    class="link-to-prism">src/users/providers/users.service.ts:14</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="23"
+                                    class="link-to-prism">src/users/providers/users.service.ts:23</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>get all users matching a set of filters</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -367,14 +373,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="32"
-                                    class="link-to-prism">src/users/providers/users.service.ts:32</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="45"
+                                    class="link-to-prism">src/users/providers/users.service.ts:45</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>get a single user by ID</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -434,14 +442,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="48"
-                                    class="link-to-prism">src/users/providers/users.service.ts:48</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="70"
+                                    class="link-to-prism">src/users/providers/users.service.ts:70</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>update a user by ID</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -508,10 +518,19 @@ import { AuthService } from &#x27;../../auth/providers/auth.service&#x27;;
 
 @Injectable()
 export class UsersService {
+  /**
+   * constructor
+   * @param authService
+   */
   constructor(
     @Inject(forwardRef(() &#x3D;&gt; AuthService))
     private readonly authService: AuthService,
   ) {}
+
+  /**
+   * get all users matching a set of filters
+   * @param getUsersDto
+   */
   findAll(getUsersDto: GetUsersDto) {
     const isAuth &#x3D; this.authService.isAuthenticated();
     console.log(isAuth);
@@ -530,6 +549,10 @@ export class UsersService {
     ];
   }
 
+  /**
+   * get a single user by ID
+   * @param getUserDto
+   */
   findOne(getUserDto: GetUserDto) {
     return {
       firstName: &#x27;John&#x27;,
@@ -538,6 +561,10 @@ export class UsersService {
     };
   }
 
+  /**
+   * create a user
+   * @param createUserDto
+   */
   create(createUserDto: CreateUserDto) {
     return {
       firstName: &#x27;new&#x27;,
@@ -546,6 +573,11 @@ export class UsersService {
     };
   }
 
+  /**
+   * update a user by ID
+   * @param id
+   * @param patchUserDto
+   */
   update(id: string, patchUserDto: PatchUserDto) {
     return {
       firstName: &#x27;updated&#x27;,

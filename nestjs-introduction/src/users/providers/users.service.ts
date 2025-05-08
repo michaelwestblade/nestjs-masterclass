@@ -7,10 +7,19 @@ import { AuthService } from '../../auth/providers/auth.service';
 
 @Injectable()
 export class UsersService {
+  /**
+   * constructor
+   * @param authService
+   */
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
   ) {}
+
+  /**
+   * get all users matching a set of filters
+   * @param getUsersDto
+   */
   findAll(getUsersDto: GetUsersDto) {
     const isAuth = this.authService.isAuthenticated();
     console.log(isAuth);
@@ -29,6 +38,10 @@ export class UsersService {
     ];
   }
 
+  /**
+   * get a single user by ID
+   * @param getUserDto
+   */
   findOne(getUserDto: GetUserDto) {
     return {
       firstName: 'John',
@@ -37,6 +50,10 @@ export class UsersService {
     };
   }
 
+  /**
+   * create a user
+   * @param createUserDto
+   */
   create(createUserDto: CreateUserDto) {
     return {
       firstName: 'new',
@@ -45,6 +62,11 @@ export class UsersService {
     };
   }
 
+  /**
+   * update a user by ID
+   * @param id
+   * @param patchUserDto
+   */
   update(id: string, patchUserDto: PatchUserDto) {
     return {
       firstName: 'updated',
