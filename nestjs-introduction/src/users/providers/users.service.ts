@@ -12,6 +12,9 @@ export class UsersService {
     private readonly authService: AuthService,
   ) {}
   findAll(getUsersDto: GetUsersDto) {
+    const isAuth = this.authService.isAuthenticated();
+    console.log(isAuth);
+
     return [
       {
         firstName: 'John',
