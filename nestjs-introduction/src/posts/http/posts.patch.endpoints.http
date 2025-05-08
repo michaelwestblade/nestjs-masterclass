@@ -1,0 +1,9 @@
+PATCH http://localhost:3000/posts/123
+Content-Type: application/json
+
+{
+  "title": "A new title",
+  "slug": "a-new-title"
+}
+
+###

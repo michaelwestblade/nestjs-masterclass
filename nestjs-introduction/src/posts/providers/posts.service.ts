@@ -3,6 +3,7 @@ import { GetPostsDto } from '../dtos/get-posts.dto';
 import { GetPostDto } from '../dtos/get-post.dto';
 import { UsersService } from '../../users/providers/users.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
+import { PatchPostDto } from '../dtos/patch-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -30,6 +31,13 @@ export class PostsService {
   }
 
   createOne(createPostDto: CreatePostDto) {
+    return {
+      title: 'Test Title',
+      content: 'lorem ipsum',
+    };
+  }
+
+  updatePost(id: string, patchPostDto: PatchPostDto) {
     return {
       title: 'Test Title',
       content: 'lorem ipsum',
