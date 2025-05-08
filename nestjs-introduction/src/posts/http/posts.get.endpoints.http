@@ -1,0 +1,5 @@
+GET localhost:3000/posts?limit=20&page=1
+###
+
+GET localhost:3000/posts/12
+###
