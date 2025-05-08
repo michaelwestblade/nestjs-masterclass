@@ -8,4 +8,7 @@ export class GetPostsDto {
   @IsInt()
   @Type(() => Number)
   page: number;
+  @IsInt()
+  @Type(() => Number)
+  userId: number;
 }
