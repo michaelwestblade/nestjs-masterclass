@@ -105,35 +105,21 @@ export class CreatePostDto {
   tags?: string[];
 
   @ApiPropertyOptional({
-    type: 'array',
-    required: false,
+    type: 'object',
+    additionalProperties: false,
     items: {
       type: 'object',
       properties: {
-        key: {
-          type: 'string',
-          description:
-            'The key can be an string identifier for your meta option',
-          example: 'sidebarEnabled',
-        },
-        value: {
-          type: 'any',
-          description: 'Any value that you want to save to the key',
-          example: true,
+        metaValue: {
+          type: 'json',
+          description: 'metaValue is a JSON string of metaOptions',
+          example: '{"sideBarEnabled": true}',
         },
       },
     },
-    description: 'The tags passed as strings',
-    example: [
-      {
-        key: 'sidebarEnabled',
-        value: true,
-      },
-    ],
   })
-  @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDto)
-  metaOptions?: CreatePostMetaOptionsDto[];
+  metaOptions?: CreatePostMetaOptionsDto | null;
 }

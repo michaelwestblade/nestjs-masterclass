@@ -55,7 +55,7 @@ export class PostsController {
   })
   @Post()
   public createPost(@Body() createPostDto: CreatePostDto) {
-    return this.postService.createOne(createPostDto);
+    return this.postService.create(createPostDto);
   }
 
   /**
@@ -76,7 +76,7 @@ export class PostsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() patchPostDto: PatchPostDto,
   ) {
-    return this.postService.updatePost(id, patchPostDto);
+    return this.postService.update(id, patchPostDto);
   }
 
   /**
@@ -89,6 +89,6 @@ export class PostsController {
   })
   @Delete(':id')
   public deletePost(@Param('id', ParseIntPipe) id: number) {
-    return this.postService.deletePost(id);
+    return this.postService.delete(id);
   }
 }

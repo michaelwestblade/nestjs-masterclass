@@ -8,5 +8,6 @@ import { MetaOptionEntity } from './entities/meta-option.entity';
   controllers: [MetaOptionsController],
   providers: [MetaOptionsService],
   imports: [TypeOrmModule.forFeature([MetaOptionEntity])],
+  exports: [MetaOptionsService],
 })
 export class MetaOptionsModule {}
