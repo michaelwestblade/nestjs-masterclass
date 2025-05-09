@@ -3,43 +3,54 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { PostEntity } from '../../posts/entities/post.entity';
 
-@Entity('users')
-export class UserEntity {
+@Entity('tags')
+export class TagEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
     type: 'varchar',
-    length: 96,
-    nullable: false,
-  })
-  firstName: string;
-
-  @Column({
-    type: 'varchar',
-    length: 96,
-    nullable: true,
-  })
-  lastName: string;
-
-  @Column({
-    type: 'varchar',
-    length: 96,
+    length: 256,
     nullable: false,
     unique: true,
   })
-  email: string;
+  name: string;
 
   @Column({
     type: 'varchar',
-    length: 96,
+    length: 512,
+    nullable: false,
+    unique: true,
+  })
+  slug: string;
+
+  @Column({
+    type: 'text',
     nullable: false,
   })
-  password: string;
+  description: string;
+
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
+  schema?: string;
+
+  @Column({
+    type: 'varchar',
+    length: 1024,
+    nullable: true,
+  })
+  featuredImageUrl?: string;
+
+  @ManyToMany(() => PostEntity)
+  posts: PostEntity[];
 
   @CreateDateColumn()
   createdAt: string;
