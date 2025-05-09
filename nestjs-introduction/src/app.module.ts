@@ -11,6 +11,8 @@ import { UserEntity } from './users/entities/user.entity';
 import { PostEntity } from './posts/entities/post.entity';
 import { TagsModule } from './tags/tags.module';
 import { MetaOptionsModule } from './meta-options/meta-options.module';
+import { MetaOptionEntity } from './meta-options/entities/meta-option.entity';
+import { TagEntity } from './tags/entities/tag.entity';
 
 const DB_PORT = process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432;
 const DB_HOST = process.env.DB_HOST || '';
@@ -34,7 +36,8 @@ const DB_NAME = process.env.DB_NAME || '';
         database: DB_NAME,
         port: DB_PORT,
         synchronize: true,
-        entities: [UserEntity, PostEntity],
+        entities: [UserEntity, PostEntity, TagEntity, MetaOptionEntity],
+        autoLoadEntities: true,
       }),
     }),
     ConfigModule,
