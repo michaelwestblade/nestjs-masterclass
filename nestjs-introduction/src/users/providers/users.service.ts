@@ -1,41 +1,43 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { GetUsersDto } from '../dtos/get-users.dto';
 import { GetUserDto } from '../dtos/get-user.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { AuthService } from '../../auth/providers/auth.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
 export class UsersService {
   /**
-   * constructor
+   *
    * @param authService
+   * @param usersRepository
    */
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
   /**
    * get all users matching a set of filters
    * @param getUsersDto
    */
-  findAll(getUsersDto: GetUsersDto) {
-    const isAuth = this.authService.isAuthenticated();
-    console.log(isAuth);
+  async findAll(getUsersDto: GetUsersDto) {
+    const users = await this.usersRepository.findBy({
+      email: getUsersDto.email,
+    });
 
-    return [
-      {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@doe.com',
-      },
-      {
-        firstName: 'Jane',
-        lastName: 'Doe',
-        email: 'jane@doe.com',
-      },
-    ];
+    return users;
   }
 
   /**
@@ -43,23 +45,34 @@ export class UsersService {
    * @param getUserDto
    */
   findOne(getUserDto: GetUserDto) {
-    return {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@doe.com',
-    };
+    return this.usersRepository.findOne({
+      where: {
+        id: getUserDto.id,
+      },
+    });
   }
 
   /**
    * create a user
    * @param createUserDto
    */
-  create(createUserDto: CreateUserDto) {
-    return {
-      firstName: 'new',
-      lastName: 'user',
-      email: 'new@user.com',
-    };
+  async create(createUserDto: CreateUserDto) {
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+
+    if (existingUser) {
+      throw new BadRequestException('User already exists');
+    }
+
+    const newUser = this.usersRepository.create({
+      firstName: createUserDto.firstName,
+      lastName: createUserDto.lastName,
+      email: createUserDto.email,
+      password: createUserDto.password,
+    });
+
+    return this.usersRepository.save(newUser);
   }
 
   /**
@@ -67,11 +80,13 @@ export class UsersService {
    * @param id
    * @param patchUserDto
    */
-  update(id: string, patchUserDto: PatchUserDto) {
-    return {
-      firstName: 'updated',
-      lastName: 'user',
-      email: 'updated@user.com',
-    };
+  async update(id: string, patchUserDto: PatchUserDto) {
+    const user = await this.usersRepository.findOne({ where: { id: id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.usersRepository.save(user);
   }
 }

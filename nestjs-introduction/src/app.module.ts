@@ -7,8 +7,13 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from './config/config.module';
 import * as process from 'node:process';
+import { UserEntity } from './users/entities/user.entity';
 
 const DB_PORT = process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432;
+const DB_HOST = process.env.DB_HOST || '';
+const DB_USER = process.env.DB_USER || '';
+const DB_PASS = process.env.DB_PASS || '';
+const DB_NAME = process.env.DB_NAME || '';
 
 @Module({
   imports: [
@@ -20,13 +25,13 @@ const DB_PORT = process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432;
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        host: process.env.DB_HOST || '',
-        username: process.env.DB_USER || '',
-        password: process.env.DB_PASS || '',
-        database: process.env.DB_NAME || '',
+        host: DB_HOST,
+        username: DB_USER,
+        password: DB_PASS,
+        database: DB_NAME,
         port: DB_PORT,
         synchronize: true,
-        entities: ['./src/**/*.entity{.ts,.js}'],
+        entities: [UserEntity],
       }),
     }),
     ConfigModule,

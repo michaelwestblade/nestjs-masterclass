@@ -1,4 +1,4 @@
-import { IsInt } from 'class-validator';
+import { IsInt, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class GetPostsDto {
@@ -8,7 +8,7 @@ export class GetPostsDto {
   @IsInt()
   @Type(() => Number)
   page: number;
-  @IsInt()
-  @Type(() => Number)
-  userId: number;
+
+  @IsUUID()
+  userId: string;
 }

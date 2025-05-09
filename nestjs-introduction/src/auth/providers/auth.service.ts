@@ -12,9 +12,13 @@ export class AuthService {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
   ) {}
-  login(email: string, password: string) {
+  async login(email: string, password: string) {
     // check if user exists
-    const [user] = this.usersService.findAll({ limit: 1, page: 1, email });
+    const [user] = await this.usersService.findAll({
+      limit: 1,
+      page: 1,
+      email,
+    });
 
     if (!user) {
       throw new NotFoundException();
