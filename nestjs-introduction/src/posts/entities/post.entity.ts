@@ -88,7 +88,9 @@ export class PostEntity {
   @OneToMany(() => TagEntity, (tag) => tag.posts, {})
   tags?: TagEntity[];
 
-  @OneToOne(() => MetaOptionEntity)
+  @OneToOne(() => MetaOptionEntity, {
+    cascade: true,
+  })
   @JoinColumn()
-  metaOptions?: MetaOptionEntity;
+  metaOptions?: MetaOptionEntity | null;
 }

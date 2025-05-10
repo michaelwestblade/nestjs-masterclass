@@ -54,24 +54,7 @@ export class PostsService {
    * @param createPostDto
    */
   async create(createPostDto: CreatePostDto) {
-    const postObject = {
-      title: createPostDto.title,
-      content: createPostDto.content,
-      slug: createPostDto.slug,
-      status: createPostDto.status,
-      schema: createPostDto.schema,
-      featuredImageUrl: createPostDto.featuredImageUrl,
-    } as PostEntity;
-    let metaOptions: MetaOptionEntity | null;
-
-    if (createPostDto.metaOptions?.metaValue) {
-      metaOptions = await this.metaOptionsService.createPostMetaOptions({
-        metaValue: createPostDto.metaOptions?.metaValue || '',
-      });
-      postObject.metaOptions = metaOptions;
-    }
-
-    const post = this.postsRepository.create(postObject);
+    const post = this.postsRepository.create(createPostDto);
 
     return this.postsRepository.save(post);
   }
