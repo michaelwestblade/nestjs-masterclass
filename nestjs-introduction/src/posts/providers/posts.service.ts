@@ -77,9 +77,6 @@ export class PostsService {
     }
 
     await this.postsRepository.delete(id);
-    if (post.metaOptions?.id) {
-      await this.metaOptionsService.delete(post.metaOptions?.id);
-    }
 
     return post.id;
   }
