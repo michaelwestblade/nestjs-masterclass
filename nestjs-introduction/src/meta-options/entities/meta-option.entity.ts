@@ -30,7 +30,9 @@ export class MetaOptionEntity {
   @DeleteDateColumn()
   deletedAt: string;
 
-  @OneToOne(() => PostEntity, (post) => post.metaOptions)
+  @OneToOne(() => PostEntity, (post) => post.metaOptions, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   post: PostEntity;
 }
