@@ -73,7 +73,7 @@ export class PostsController {
     description: 'post was updated successfully',
   })
   public updatedPost(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() patchPostDto: PatchPostDto,
   ) {
     return this.postService.update(id, patchPostDto);
@@ -88,7 +88,7 @@ export class PostsController {
     description: 'post was deleted successfully',
   })
   @Delete(':id')
-  public deletePost(@Param('id', ParseIntPipe) id: number) {
+  public deletePost(@Param('id') id: string) {
     return this.postService.delete(id);
   }
 }

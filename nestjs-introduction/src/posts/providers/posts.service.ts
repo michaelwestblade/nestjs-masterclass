@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { GetPostsDto } from '../dtos/get-posts.dto';
 import { GetPostDto } from '../dtos/get-post.dto';
 import { UsersService } from '../../users/providers/users.service';
@@ -8,7 +8,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PostEntity } from '../entities/post.entity';
 import { MetaOptionsService } from '../../meta-options/providers/meta-options.service';
-import { MetaOptionEntity } from '../../meta-options/entities/meta-option.entity';
 
 @Injectable()
 export class PostsService {
@@ -24,18 +23,13 @@ export class PostsService {
    * @param getPostsDto
    */
   findAll(getPostsDto: GetPostsDto) {
-    const user = this.usersService.findOne({ id: getPostsDto.userId });
-    return [
-      {
-        user,
-        title: 'Test Title',
-        content: 'lorem ipsum',
-      },
-      {
-        title: 'Test Title 2',
-        content: 'lorem ipsum',
-      },
-    ];
+    // const user = this.usersService.findOne({ id: getPostsDto.userId });
+    const posts = this.postsRepository.find({
+      loadEagerRelations: true,
+      relations: ['metaOptions'],
+    });
+
+    return posts;
   }
 
   /**
@@ -64,7 +58,7 @@ export class PostsService {
    * @param id
    * @param patchPostDto
    */
-  update(id: number, patchPostDto: PatchPostDto) {
+  update(id: string, patchPostDto: PatchPostDto) {
     return {
       title: 'Test Title',
       content: 'lorem ipsum',
@@ -75,7 +69,18 @@ export class PostsService {
    * delete a post
    * @param id
    */
-  delete(id: number) {
-    return true;
+  async delete(id: string) {
+    const post = await this.postsRepository.findOne({ where: { id: id } });
+
+    if (!post) {
+      throw new NotFoundException(`No post with ID ${id} exists`);
+    }
+
+    await this.postsRepository.delete(id);
+    if (post.metaOptions?.id) {
+      await this.metaOptionsService.delete(post.metaOptions?.id);
+    }
+
+    return post.id;
   }
 }

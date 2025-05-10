@@ -20,4 +20,8 @@ export class MetaOptionsService {
 
     return this.metaOptionsRepository.save(metaOption);
   }
+
+  async delete(id: string) {
+    return this.metaOptionsRepository.delete(id);
+  }
 }
