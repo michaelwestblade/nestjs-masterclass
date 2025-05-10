@@ -88,7 +88,7 @@ export class PostEntity {
   @OneToMany(() => TagEntity, (tag) => tag.posts, {})
   tags?: TagEntity[];
 
-  @OneToOne(() => MetaOptionEntity, {
+  @OneToOne(() => MetaOptionEntity, (metaOption) => metaOption.post, {
     cascade: true,
     // eager: true,
   })
