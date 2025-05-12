@@ -3,7 +3,7 @@ Accept: application/json
 
 ###
 
-GET http://localhost:3000/users/3bd7a5d8-d9e0-4933-a19f-ee3497351e1a
+GET http://localhost:3000/users/715600a5-af74-4eb9-9287-8dc68adddb49
 Accept: application/json
 
 ###

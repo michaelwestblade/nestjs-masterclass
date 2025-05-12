@@ -4,6 +4,7 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -14,6 +15,7 @@ import { PostStatus } from '../enums/postStatus.enum';
 import { CreatePostMetaOptionsDto } from '../../meta-options/dtos/create-post-meta-options.dto';
 import { MetaOptionEntity } from '../../meta-options/entities/meta-option.entity';
 import { TagEntity } from '../../tags/entities/tag.entity';
+import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity('posts')
 export class PostEntity {
@@ -94,4 +96,7 @@ export class PostEntity {
   })
   @JoinColumn()
   metaOptions?: MetaOptionEntity | null;
+
+  @ManyToOne(() => UserEntity, (user) => user.posts, {})
+  author: UserEntity;
 }

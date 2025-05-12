@@ -8,6 +8,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUUID,
   Matches,
   MaxLength,
   MinLength,
@@ -123,4 +124,12 @@ export class CreatePostDto {
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDto)
   metaOptions?: CreatePostMetaOptionsDto | null;
+
+  @ApiProperty({
+    description: 'The author of the post',
+    example: '715600a5-af74-4eb9-9287-8dc68adddb49',
+  })
+  @IsUUID()
+  @IsNotEmpty()
+  authorId: string;
 }
