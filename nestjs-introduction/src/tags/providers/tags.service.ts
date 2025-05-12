@@ -36,4 +36,8 @@ export class TagsService {
   async delete(id: string) {
     return this.tagRepository.delete(id);
   }
+
+  softDelete(id: string) {
+    return this.tagRepository.softDelete(id);
+  }
 }

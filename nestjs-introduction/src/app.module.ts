@@ -5,7 +5,6 @@ import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from './config/config.module';
 import * as process from 'node:process';
 import { UserEntity } from './users/entities/user.entity';
 import { PostEntity } from './posts/entities/post.entity';
@@ -13,28 +12,29 @@ import { TagsModule } from './tags/tags.module';
 import { MetaOptionsModule } from './meta-options/meta-options.module';
 import { MetaOptionEntity } from './meta-options/entities/meta-option.entity';
 import { TagEntity } from './tags/entities/tag.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
-const DB_PORT = process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432;
-const DB_HOST = process.env.DB_HOST || '';
-const DB_USER = process.env.DB_USER || '';
-const DB_PASS = process.env.DB_PASS || '';
-const DB_NAME = process.env.DB_NAME || '';
+const env = process.env.NODE_ENV || 'development';
 
 @Module({
   imports: [
     UsersModule,
     PostsModule,
     AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env.${env}`,
+    }),
     TypeOrmModule.forRootAsync({
-      imports: [],
-      inject: [],
-      useFactory: () => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        host: DB_HOST,
-        username: DB_USER,
-        password: DB_PASS,
-        database: DB_NAME,
-        port: DB_PORT,
+        host: config.get('DB_HOST'),
+        username: config.get('DB_USER'),
+        password: config.get('DB_PASS'),
+        database: config.get('DB_NAME'),
+        port: +config.get('DB_PORT'),
         synchronize: true,
         entities: [UserEntity, PostEntity, TagEntity, MetaOptionEntity],
         autoLoadEntities: true,
