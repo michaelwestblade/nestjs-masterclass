@@ -31,6 +31,7 @@ export class PostsService {
       relations: {
         metaOptions: true,
         author: true,
+        tags: true,
       },
     });
 
@@ -79,11 +80,27 @@ export class PostsService {
    * @param id
    * @param patchPostDto
    */
-  update(id: string, patchPostDto: PatchPostDto) {
-    return {
-      title: 'Test Title',
-      content: 'lorem ipsum',
-    };
+  async update(id: string, patchPostDto: PatchPostDto) {
+    const post = await this.postsRepository.findOne({ where: { id: id } });
+
+    if (!post) {
+      throw new NotFoundException(`No post with ID ${id} exists`);
+    }
+
+    const tags = await this.tagsService.findManyById(patchPostDto.tags || []);
+
+    post.title = patchPostDto.title ?? post.title;
+    post.content = patchPostDto.content ?? post.content;
+    post.tags = patchPostDto.tags ? tags : post.tags;
+    post.schema = patchPostDto.schema ?? post.schema;
+    post.publishOn = patchPostDto.publishOn ?? post.publishOn;
+    post.postType = patchPostDto.postType ?? post.postType;
+    post.status = patchPostDto.status ?? post.status;
+    post.slug = patchPostDto.slug ?? post.slug;
+    post.featuredImageUrl =
+      patchPostDto.featuredImageUrl ?? post.featuredImageUrl;
+
+    return this.postsRepository.save(post);
   }
 
   /**

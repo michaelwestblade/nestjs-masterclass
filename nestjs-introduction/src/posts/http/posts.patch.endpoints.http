@@ -1,9 +1,8 @@
-PATCH http://localhost:3000/posts/123
+PATCH http://localhost:3000/posts/ab0bcadd-cce3-4879-92aa-2124258b0fd9
 Content-Type: application/json
 
 {
-  "title": "A new title",
-  "slug": "a-new-title"
+  "status": "reviewed"
 }
 
 ###

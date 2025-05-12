@@ -72,7 +72,7 @@ export class PostsController {
     status: 200,
     description: 'post was updated successfully',
   })
-  public updatedPost(
+  public updatePost(
     @Param('id') id: string,
     @Body() patchPostDto: PatchPostDto,
   ) {
