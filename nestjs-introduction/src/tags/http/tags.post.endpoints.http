@@ -1,0 +1,8 @@
+POST localhost:3000/tags
+Content-Type: application/json
+
+{
+  "name": "Things that make you go hmmm",
+  "slug": "things-that-make-you-go-hmmm",
+  "description": "Pretty self explanatory, dawg"
+}
