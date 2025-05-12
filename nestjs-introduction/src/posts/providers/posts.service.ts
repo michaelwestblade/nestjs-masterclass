@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PostEntity } from '../entities/post.entity';
 import { MetaOptionsService } from '../../meta-options/providers/meta-options.service';
+import { TagsService } from '../../tags/providers/tags.service';
 
 @Injectable()
 export class PostsService {
@@ -16,6 +17,7 @@ export class PostsService {
     @InjectRepository(PostEntity)
     private readonly postsRepository: Repository<PostEntity>,
     private readonly metaOptionsService: MetaOptionsService,
+    private readonly tagsService: TagsService,
   ) {}
 
   /**
@@ -61,8 +63,11 @@ export class PostsService {
       );
     }
 
+    const tags = await this.tagsService.findManyById(createPostDto.tags || []);
+
     const post = this.postsRepository.create({
       ...createPostDto,
+      tags,
       author,
     });
 

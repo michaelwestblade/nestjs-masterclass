@@ -4,6 +4,8 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -87,7 +89,10 @@ export class PostEntity {
   @DeleteDateColumn()
   deletedAt: string;
 
-  @OneToMany(() => TagEntity, (tag) => tag.posts, {})
+  @ManyToMany(() => TagEntity, (tag) => tag.posts, {})
+  @JoinTable({
+    name: 'posts_tags',
+  })
   tags?: TagEntity[];
 
   @OneToOne(() => MetaOptionEntity, (metaOption) => metaOption.post, {

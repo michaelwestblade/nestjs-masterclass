@@ -97,14 +97,17 @@ export class CreatePostDto {
   publishOn?: string;
 
   @ApiPropertyOptional({
-    description: 'Array of tags passed as strings',
-    example: ['nestJS', 'typescript'],
+    description: 'Array of tag ids passed as strings',
+    example: [
+      'b56f7976-4c52-460b-bc18-78856a748bea',
+      '626121fd-35c5-4642-9219-aaf933af1b7c',
+    ],
   })
   @IsArray()
-  @IsString({ each: true })
+  @IsUUID('4', { each: true })
   @MinLength(3, { each: true })
   @IsOptional()
-  tags?: TagEntity[];
+  tags?: string[];
 
   @ApiPropertyOptional({
     type: 'object',
