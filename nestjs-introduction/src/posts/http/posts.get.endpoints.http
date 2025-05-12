@@ -1,5 +1,5 @@
 GET localhost:3000/posts?limit=20&page=1
 ###
 
-GET localhost:3000/posts/12
+GET localhost:3000/posts/d89c5b1a-713a-40fd-8254-d2d1a712969a
 ###

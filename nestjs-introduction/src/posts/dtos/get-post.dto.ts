@@ -1,8 +1,7 @@
-import { IsInt } from 'class-validator';
+import { IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class GetPostDto {
-  @IsInt()
-  @Type(() => Number)
-  id: number;
+  @IsUUID()
+  id: string;
 }

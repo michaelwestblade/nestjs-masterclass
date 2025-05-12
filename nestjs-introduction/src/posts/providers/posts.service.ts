@@ -43,10 +43,10 @@ export class PostsService {
    * @param getPostDto
    */
   findOne(getPostDto: GetPostDto) {
-    return {
-      title: 'Test Title',
-      content: 'lorem ipsum',
-    };
+    return this.postsRepository.findOne({
+      where: { id: getPostDto.id },
+      relations: { metaOptions: true, author: true, tags: true },
+    });
   }
 
   /**
