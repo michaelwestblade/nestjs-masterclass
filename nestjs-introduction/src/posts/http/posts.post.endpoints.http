@@ -2,17 +2,16 @@ POST http://localhost:3000/posts
 Content-Type: application/json
 
 {
-  "title": "Something about js",
+  "title": "Something Else",
   "postType": "post",
-  "slug": "something-about-js",
+  "slug": "something-else",
   "status": "draft",
   "content": "post-content",
   "schema": "{\r\n    \"@context\": \"https:\/\/schema.org\",\r\n    \"@type\": \"Person\"\r\n  }",
   "featuredImageUrl": "http://localhost.com/images/image1.jpg",
   "publishOn": "2024-03-16T07:46:32+0000",
   "tags": [
-    "3cfbc3d5-25cb-480d-b34b-e74565e0df5d",
-   "b56f7976-4c52-460b-bc18-78856a748bea"
+    "626121fd-35c5-4642-9219-aaf933af1b7c"
 
   ],
   "authorId": "715600a5-af74-4eb9-9287-8dc68adddb49"

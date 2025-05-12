@@ -32,4 +32,8 @@ export class TagsService {
   findOne(id: string) {
     return this.tagRepository.findOne({ where: { id: id } });
   }
+
+  async delete(id: string) {
+    return this.tagRepository.delete(id);
+  }
 }

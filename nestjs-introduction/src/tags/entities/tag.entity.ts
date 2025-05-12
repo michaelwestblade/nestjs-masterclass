@@ -50,8 +50,7 @@ export class TagEntity {
   featuredImageUrl?: string;
 
   @ManyToMany(() => PostEntity, (post) => post.tags, {
-    cascade: true,
-    eager: true,
+    onDelete: 'CASCADE',
   })
   posts: PostEntity[];
 
