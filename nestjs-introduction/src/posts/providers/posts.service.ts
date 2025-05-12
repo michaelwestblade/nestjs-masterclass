@@ -26,7 +26,10 @@ export class PostsService {
     // const user = this.usersService.findOne({ id: getPostsDto.userId });
     const posts = this.postsRepository.find({
       loadEagerRelations: true,
-      relations: ['metaOptions'],
+      relations: {
+        metaOptions: true,
+        author: true,
+      },
     });
 
     return posts;
