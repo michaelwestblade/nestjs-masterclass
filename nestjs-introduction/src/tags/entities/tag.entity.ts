@@ -49,7 +49,10 @@ export class TagEntity {
   })
   featuredImageUrl?: string;
 
-  @ManyToMany(() => PostEntity)
+  @ManyToMany(() => PostEntity, (post) => post.tags, {
+    cascade: true,
+    eager: true,
+  })
   posts: PostEntity[];
 
   @CreateDateColumn()
