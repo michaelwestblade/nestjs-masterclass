@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { GetPostsDto } from '../dtos/get-posts.dto';
 import { GetPostDto } from '../dtos/get-post.dto';
 import { UsersService } from '../../users/providers/users.service';
@@ -9,6 +13,7 @@ import { Repository } from 'typeorm';
 import { PostEntity } from '../entities/post.entity';
 import { MetaOptionsService } from '../../meta-options/providers/meta-options.service';
 import { TagsService } from '../../tags/providers/tags.service';
+import { TagEntity } from '../../tags/entities/tag.entity';
 
 @Injectable()
 export class PostsService {
@@ -81,13 +86,38 @@ export class PostsService {
    * @param patchPostDto
    */
   async update(id: string, patchPostDto: PatchPostDto) {
-    const post = await this.postsRepository.findOne({ where: { id: id } });
+    let post: PostEntity | null = null;
+    let tags: TagEntity[] | null = null;
+
+    try {
+      post = await this.postsRepository.findOne({ where: { id: id } });
+    } catch (error: any) {
+      throw new RequestTimeoutException('Unable to process request', {
+        cause: error,
+        description: 'Unable to connect to database',
+      });
+    }
 
     if (!post) {
       throw new NotFoundException(`No post with ID ${id} exists`);
     }
 
-    const tags = await this.tagsService.findManyById(patchPostDto.tags || []);
+    try {
+      tags = await this.tagsService.findManyById(patchPostDto.tags || []);
+    } catch (error: any) {
+      throw new RequestTimeoutException('Unable to process request', {
+        cause: error,
+        description: 'Unable to connect to database',
+      });
+    }
+
+    if (tags && tags.length !== patchPostDto.tags?.length) {
+      throw new NotFoundException(
+        `Couldn't find all tags passed in the request. Tags found: ${tags
+          .map((tag) => tag.name)
+          .join(',')}`,
+      );
+    }
 
     post.title = patchPostDto.title ?? post.title;
     post.content = patchPostDto.content ?? post.content;
@@ -100,7 +130,18 @@ export class PostsService {
     post.featuredImageUrl =
       patchPostDto.featuredImageUrl ?? post.featuredImageUrl;
 
-    return this.postsRepository.save(post);
+    let updatedPost: PostEntity | null = null;
+
+    try {
+      updatedPost = await this.postsRepository.save(post);
+    } catch (error: any) {
+      throw new RequestTimeoutException('Unable to save post', {
+        cause: error,
+        description: 'Unable to connect to database',
+      });
+    }
+
+    return updatedPost;
   }
 
   /**
