@@ -15,6 +15,7 @@ import { TagEntity } from './tags/entities/tag.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
+import environmentValidation from './config/environment.validation';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -27,6 +28,7 @@ const env = process.env.NODE_ENV || 'development';
       isGlobal: true,
       envFilePath: `.env.${env}`,
       load: [appConfig, databaseConfig],
+      validationSchema: environmentValidation,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
