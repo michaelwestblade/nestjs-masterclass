@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  RequestTimeoutException,
 } from '@nestjs/common';
 import { GetUsersDto } from '../dtos/get-users.dto';
 import { GetUserDto } from '../dtos/get-user.dto';
@@ -52,12 +53,27 @@ export class UsersService {
    * get a single user by ID
    * @param getUserDto
    */
-  findOne(getUserDto: GetUserDto) {
-    return this.usersRepository.findOne({
-      where: {
-        id: getUserDto.id,
-      },
-    });
+  async findOne(getUserDto: GetUserDto) {
+    let user: UserEntity | null;
+
+    try {
+      user = await this.usersRepository.findOne({
+        where: {
+          id: getUserDto.id,
+        },
+      });
+    } catch (error: any) {
+      throw new RequestTimeoutException('Unable to process request', {
+        cause: error,
+        description: 'Unable to connect to database',
+      });
+    }
+
+    if (!user) {
+      throw new NotFoundException(`User with id ${getUserDto.id} not found`);
+    }
+
+    return user;
   }
 
   /**
@@ -65,9 +81,18 @@ export class UsersService {
    * @param createUserDto
    */
   async create(createUserDto: CreateUserDto) {
-    const existingUser = await this.usersRepository.findOne({
-      where: { email: createUserDto.email },
-    });
+    let existingUser;
+
+    try {
+      existingUser = await this.usersRepository.findOne({
+        where: { email: createUserDto.email },
+      });
+    } catch (error: any) {
+      throw new RequestTimeoutException('Unable to process request', {
+        cause: error,
+        description: 'Unable to connect to database',
+      });
+    }
 
     if (existingUser) {
       throw new BadRequestException('User already exists');
@@ -80,7 +105,14 @@ export class UsersService {
       password: createUserDto.password,
     });
 
-    return this.usersRepository.save(newUser);
+    try {
+      return this.usersRepository.save(newUser);
+    } catch (error: any) {
+      throw new RequestTimeoutException('Unable to save user', {
+        cause: error,
+        description: 'Unable to connect to database',
+      });
+    }
   }
 
   /**
