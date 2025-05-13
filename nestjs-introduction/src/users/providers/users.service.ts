@@ -13,7 +13,8 @@ import { AuthService } from '../../auth/providers/auth.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
-import { ConfigService } from '@nestjs/config';
+import ProfileConfig from '../config/profile.config';
+import { ConfigType } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
@@ -27,7 +28,8 @@ export class UsersService {
     private readonly authService: AuthService,
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
-    private readonly configService: ConfigService,
+    @Inject(ProfileConfig.KEY)
+    private readonly profileConfig: ConfigType<typeof ProfileConfig>,
   ) {}
 
   /**
@@ -35,6 +37,10 @@ export class UsersService {
    * @param getUsersDto
    */
   async findAll(getUsersDto: GetUsersDto) {
+    const profileApiKey = this.profileConfig.apiKey;
+
+    console.log(profileApiKey);
+
     const users = await this.usersRepository.findBy({
       email: getUsersDto.email,
     });
