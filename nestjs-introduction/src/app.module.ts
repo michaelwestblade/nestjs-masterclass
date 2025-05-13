@@ -13,7 +13,8 @@ import { MetaOptionsModule } from './meta-options/meta-options.module';
 import { MetaOptionEntity } from './meta-options/entities/meta-option.entity';
 import { TagEntity } from './tags/entities/tag.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { appConfig } from './config/app.config';
+import appConfig from './config/app.config';
+import databaseConfig from './config/database.config';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -25,7 +26,7 @@ const env = process.env.NODE_ENV || 'development';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${env}`,
-      load: [appConfig],
+      load: [appConfig, databaseConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
