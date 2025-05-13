@@ -1,15 +1,22 @@
-import { IsInt, IsOptional, IsUUID } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsDate, IsOptional, IsUUID } from 'class-validator';
+import { PaginationQueryDto } from '../../common/pagination/dtos/pagination-query.dto';
+import { IntersectionType } from '@nestjs/swagger';
 
-export class GetPostsDto {
-  @IsInt()
-  @Type(() => Number)
-  limit: number;
-  @IsInt()
-  @Type(() => Number)
-  page: number;
-
+class GetPostsDtoBase {
   @IsUUID()
   @IsOptional()
   userId?: string;
+
+  @IsDate()
+  @IsOptional()
+  startDate?: Date;
+
+  @IsDate()
+  @IsOptional()
+  endDate?: Date;
 }
+
+export class GetPostsDto extends IntersectionType(
+  GetPostsDtoBase,
+  PaginationQueryDto,
+) {}
