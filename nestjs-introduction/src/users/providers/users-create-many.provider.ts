@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../dtos/create-user.dto';
+import {
+  ConflictException,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { UserEntity } from '../entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 
 @Injectable()
@@ -22,11 +25,18 @@ export class UsersCreateManyProvider {
     // create query runner
     const queryRunner = this.dataSource.createQueryRunner();
 
-    // connect query runner to database
-    await queryRunner.connect();
+    try {
+      // connect query runner to database
+      await queryRunner.connect();
 
-    // start transaction
-    await queryRunner.startTransaction();
+      // start transaction
+      await queryRunner.startTransaction();
+    } catch (error: any) {
+      throw new RequestTimeoutException('Could not connect to database.', {
+        cause: error,
+        description: 'Unable to connect to database.',
+      });
+    }
 
     try {
       // run queries
@@ -40,11 +50,24 @@ export class UsersCreateManyProvider {
     } catch (error: any) {
       console.error(error);
       await queryRunner.rollbackTransaction();
+      throw new ConflictException(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        `Could not complete the transaction. ${error?.message}`,
+      );
     } finally {
-      // disconnect query runner
-      await queryRunner.release();
+      try {
+        // disconnect query runner
+        await queryRunner.release();
+      } catch (error: any) {
+        // eslint-disable-next-line no-unsafe-finally
+        throw new RequestTimeoutException('Could not release db connection.', {
+          cause: error,
+          description:
+            'Unable to release db connection. Please try again later.',
+        });
+      }
     }
 
-    return newUsers;
+    return { users: newUsers, count: newUsers.length };
   }
 }
