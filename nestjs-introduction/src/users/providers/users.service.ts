@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
   RequestTimeoutException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { GetUsersDto } from '../dtos/get-users.dto';
 import { GetUserDto } from '../dtos/get-user.dto';
@@ -16,6 +17,8 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import ProfileConfig from '../config/profile.config';
 import { ConfigType } from '@nestjs/config';
+import { UsersCreateManyProvider } from './users-create-many.provider';
+import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +26,8 @@ export class UsersService {
    *
    * @param authService
    * @param usersRepository
+   * @param profileConfig
+   * @param usersCreateManyProvider
    */
   constructor(
     @Inject(forwardRef(() => AuthService))
@@ -31,6 +36,7 @@ export class UsersService {
     private readonly usersRepository: Repository<UserEntity>,
     @Inject(ProfileConfig.KEY)
     private readonly profileConfig: ConfigType<typeof ProfileConfig>,
+    private readonly usersCreateManyProvider: UsersCreateManyProvider,
   ) {}
 
   /**
@@ -113,6 +119,10 @@ export class UsersService {
         description: 'Unable to connect to database',
       });
     }
+  }
+
+  async createMany(createManyUsersDto: CreateManyUsersDto) {
+    return this.usersCreateManyProvider.createMany(createManyUsersDto);
   }
 
   /**

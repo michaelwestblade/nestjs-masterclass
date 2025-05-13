@@ -9,3 +9,31 @@ Content-Type: application/json
   "password": "test123!!"
 }
 ###
+
+# Create Many User
+POST http://localhost:3000/users/create-many
+Content-Type: application/json
+
+{
+  "users": [
+    {
+      "firstName": "Bill",
+      "lastName": "Boop",
+      "email": "bill@boop.net",
+      "password": "test123!!"
+    },
+    {
+      "firstName": "Jim",
+      "lastName": "Dorf",
+      "email": "jim@dorf.net",
+      "password": "test123!!"
+    },
+    {
+      "firstName": "Jacques",
+      "lastName": "Doe",
+      "email": "wahtever@that.net",
+      "password": "test123!!"
+    }
+  ]
+}
+###
