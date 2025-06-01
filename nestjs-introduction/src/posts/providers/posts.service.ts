@@ -48,6 +48,14 @@ export class PostsService {
         limit: getPostsDto.limit,
         page: getPostsDto.page,
       },
+      {
+        loadEagerRelations: true,
+        relations: {
+          metaOptions: true,
+          author: true,
+          tags: true,
+        },
+      },
       this.postsRepository,
     );
 

@@ -4,6 +4,7 @@ import { ObjectLiteral, Repository } from 'typeorm';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { Paginated } from '../interfaces/paginated.interface';
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
 
 @Injectable()
 export class PaginationProvider<T extends ObjectLiteral> {
@@ -11,11 +12,13 @@ export class PaginationProvider<T extends ObjectLiteral> {
 
   async paginateQuery(
     paginationQuery: PaginationQueryDto,
+    findManyOptions: FindManyOptions<T>,
     repository: Repository<T>,
   ) {
     const results = await repository.find({
       skip: (paginationQuery?.page || 1 - 1) * (paginationQuery?.limit || 20),
       take: paginationQuery.limit,
+      ...findManyOptions,
     });
 
     // create request urls
