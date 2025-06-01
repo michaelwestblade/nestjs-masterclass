@@ -14,6 +14,8 @@ import { PostEntity } from '../entities/post.entity';
 import { MetaOptionsService } from '../../meta-options/providers/meta-options.service';
 import { TagsService } from '../../tags/providers/tags.service';
 import { TagEntity } from '../../tags/entities/tag.entity';
+import { PaginationProvider } from '../../common/pagination/providers/pagination.provider';
+import { Paginated } from '../../common/pagination/interfaces/paginated.interface';
 
 @Injectable()
 export class PostsService {
@@ -23,22 +25,31 @@ export class PostsService {
     private readonly postsRepository: Repository<PostEntity>,
     private readonly metaOptionsService: MetaOptionsService,
     private readonly tagsService: TagsService,
+    private readonly paginationProvider: PaginationProvider<PostEntity>,
   ) {}
 
   /**
    * find all posts
    * @param getPostsDto
    */
-  findAll(getPostsDto: GetPostsDto) {
+  async findAll(getPostsDto: GetPostsDto): Promise<Paginated<PostEntity>> {
     // const user = this.usersService.findOne({ id: getPostsDto.userId });
-    const posts = this.postsRepository.find({
-      loadEagerRelations: true,
-      relations: {
-        metaOptions: true,
-        author: true,
-        tags: true,
+    // const posts = this.postsRepository.find({
+    //   loadEagerRelations: true,
+    //   relations: {
+    //     metaOptions: true,
+    //     author: true,
+    //     tags: true,
+    //   },
+    // });
+
+    const posts = await this.paginationProvider.paginateQuery(
+      {
+        limit: getPostsDto.limit,
+        page: getPostsDto.page,
       },
-    });
+      this.postsRepository,
+    );
 
     return posts;
   }
