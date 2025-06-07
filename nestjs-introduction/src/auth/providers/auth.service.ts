@@ -6,16 +6,17 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../../users/providers/users.service';
 import { SignInDto } from '../dtos/signin.dto';
+import { SignInProvider } from './sign-in.provider';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
+    private readonly signInProvider: SignInProvider,
   ) {}
-  async signIn({ email, password }: SignInDto) {
-    // check if user exists
-    const user = await this.usersService.findOneByEmail(email);
+  async signIn(signInDto: SignInDto) {
+    return this.signInProvider.signIn(signInDto);
   }
 
   isAuthenticated() {
