@@ -19,6 +19,8 @@ import ProfileConfig from '../config/profile.config';
 import { ConfigType } from '@nestjs/config';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
+import { CreateUserProvider } from './create-user.provider';
+import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 
 @Injectable()
 export class UsersService {
@@ -28,6 +30,8 @@ export class UsersService {
    * @param usersRepository
    * @param profileConfig
    * @param usersCreateManyProvider
+   * @param createUserProvider
+   * @param findOneUserByEmailProvider
    */
   constructor(
     @Inject(forwardRef(() => AuthService))
@@ -37,6 +41,8 @@ export class UsersService {
     @Inject(ProfileConfig.KEY)
     private readonly profileConfig: ConfigType<typeof ProfileConfig>,
     private readonly usersCreateManyProvider: UsersCreateManyProvider,
+    private readonly createUserProvider: CreateUserProvider,
+    private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
   ) {}
 
   /**
@@ -87,38 +93,7 @@ export class UsersService {
    * @param createUserDto
    */
   async create(createUserDto: CreateUserDto) {
-    let existingUser;
-
-    try {
-      existingUser = await this.usersRepository.findOne({
-        where: { email: createUserDto.email },
-      });
-    } catch (error: any) {
-      throw new RequestTimeoutException('Unable to process request', {
-        cause: error,
-        description: 'Unable to connect to database',
-      });
-    }
-
-    if (existingUser) {
-      throw new BadRequestException('User already exists');
-    }
-
-    const newUser = this.usersRepository.create({
-      firstName: createUserDto.firstName,
-      lastName: createUserDto.lastName,
-      email: createUserDto.email,
-      password: createUserDto.password,
-    });
-
-    try {
-      return this.usersRepository.save(newUser);
-    } catch (error: any) {
-      throw new RequestTimeoutException('Unable to save user', {
-        cause: error,
-        description: 'Unable to connect to database',
-      });
-    }
+    return this.createUserProvider.create(createUserDto);
   }
 
   async createMany(createManyUsersDto: CreateManyUsersDto) {
@@ -138,5 +113,13 @@ export class UsersService {
     }
 
     return this.usersRepository.save(user);
+  }
+
+  /**
+   *
+   * @param email
+   */
+  public async findOneByEmail(email: string): Promise<UserEntity> {
+    return this.findOneUserByEmailProvider.findOneByEmail(email);
   }
 }
