@@ -36,7 +36,7 @@ export class SignInProvider {
       throw new UnauthorizedException('Invalid password');
     }
 
-    const token = '';
+    const token = 'test';
     return token;
   }
 }

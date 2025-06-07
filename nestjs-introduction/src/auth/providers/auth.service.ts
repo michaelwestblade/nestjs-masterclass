@@ -10,7 +10,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly signInProvider: SignInProvider,
   ) {}
-  async signIn(signInDto: SignInDto) {
+  signIn(signInDto: SignInDto) {
     return this.signInProvider.signIn(signInDto);
   }
 
