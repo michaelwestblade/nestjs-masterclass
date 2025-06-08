@@ -31,10 +31,14 @@ export class PostsController {
   /**
    * get all posts with filters
    * @param getPostsDto
+   * @param activeUser
    */
   @Get()
-  public getPosts(@Query() getPostsDto: GetPostsDto) {
-    return this.postService.findAll(getPostsDto);
+  public getPosts(
+    @Query() getPostsDto: GetPostsDto,
+    @ActiveUser() activeUser: ActiveUserInterface,
+  ) {
+    return this.postService.findAll(activeUser, getPostsDto);
   }
 
   /**

@@ -17,6 +17,7 @@ import { TagEntity } from '../../tags/entities/tag.entity';
 import { PaginationProvider } from '../../common/pagination/providers/pagination.provider';
 import { Paginated } from '../../common/pagination/interfaces/paginated.interface';
 import { ActiveUserInterface } from '../../auth/interfaces/active-user.interfaced';
+import { CreatePostProvider } from './create-post.provider';
 
 @Injectable()
 export class PostsService {
@@ -27,23 +28,18 @@ export class PostsService {
     private readonly metaOptionsService: MetaOptionsService,
     private readonly tagsService: TagsService,
     private readonly paginationProvider: PaginationProvider<PostEntity>,
+    private readonly createPostsProvider: CreatePostProvider,
   ) {}
 
   /**
    * find all posts
    * @param getPostsDto
+   * @param activeUser
    */
-  async findAll(getPostsDto: GetPostsDto): Promise<Paginated<PostEntity>> {
-    // const user = this.usersService.findOne({ id: getPostsDto.userId });
-    // const posts = this.postsRepository.find({
-    //   loadEagerRelations: true,
-    //   relations: {
-    //     metaOptions: true,
-    //     author: true,
-    //     tags: true,
-    //   },
-    // });
-
+  async findAll(
+    activeUser: ActiveUserInterface,
+    getPostsDto: GetPostsDto,
+  ): Promise<Paginated<PostEntity>> {
     const posts = await this.paginationProvider.paginateQuery(
       {
         limit: getPostsDto.limit,
@@ -55,6 +51,11 @@ export class PostsService {
           metaOptions: true,
           author: true,
           tags: true,
+        },
+        where: {
+          author: {
+            id: activeUser.sub,
+          },
         },
       },
       this.postsRepository,
@@ -80,25 +81,7 @@ export class PostsService {
    * @param createPostDto
    */
   async create(activeUser: ActiveUserInterface, createPostDto: CreatePostDto) {
-    const author = await this.usersService.findOne({
-      id: activeUser.sub,
-    });
-
-    if (!author) {
-      throw new NotFoundException(
-        `No author exists for id ${createPostDto.authorId}`,
-      );
-    }
-
-    const tags = await this.tagsService.findManyById(createPostDto.tags || []);
-
-    const post = this.postsRepository.create({
-      ...createPostDto,
-      tags,
-      author,
-    });
-
-    return this.postsRepository.save(post);
+    return this.createPostsProvider.create(activeUser, createPostDto);
   }
 
   /**
