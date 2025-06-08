@@ -16,6 +16,7 @@ import { TagsService } from '../../tags/providers/tags.service';
 import { TagEntity } from '../../tags/entities/tag.entity';
 import { PaginationProvider } from '../../common/pagination/providers/pagination.provider';
 import { Paginated } from '../../common/pagination/interfaces/paginated.interface';
+import { ActiveUserInterface } from '../../auth/interfaces/active-user.interfaced';
 
 @Injectable()
 export class PostsService {
@@ -75,11 +76,12 @@ export class PostsService {
 
   /**
    * create posts
+   * @param activeUser
    * @param createPostDto
    */
-  async create(createPostDto: CreatePostDto) {
+  async create(activeUser: ActiveUserInterface, createPostDto: CreatePostDto) {
     const author = await this.usersService.findOne({
-      id: createPostDto.authorId,
+      id: activeUser.sub,
     });
 
     if (!author) {
