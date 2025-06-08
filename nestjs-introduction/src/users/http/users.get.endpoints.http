@@ -1,9 +1,11 @@
 GET http://localhost:3000/users?limit=20&page=1
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ###
 
 GET http://localhost:3000/users/715600a5-af74-4eb9-9287-8dc68adddb49
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ###

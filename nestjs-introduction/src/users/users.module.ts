@@ -11,6 +11,8 @@ import { FindOneUserByEmailProvider } from './providers/find-one-user-by-email.p
 import profileConfig from './config/profile.config';
 import jwtConfig from '../auth/config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from '../auth/guards/access-token.guard';
 
 @Module({
   controllers: [UsersController],

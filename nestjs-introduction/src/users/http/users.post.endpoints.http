@@ -1,6 +1,7 @@
 # Create User
 POST http://localhost:3000/users
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "firstName": "John",
@@ -13,7 +14,7 @@ Content-Type: application/json
 # Create Many User
 POST http://localhost:3000/users/create-many
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZWEzOTMyMi1hYjlhLTQ4MGYtOTBjYi0xMzFhMDM4MDk0OWYiLCJlbWFpbCI6IndhaHRldmVyMkB0aGlzLm5ldCIsImlhdCI6MTc0OTM5NTQwMSwiZXhwIjoxNzQ5Mzk5MDAxLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.aHJezngYYxgm8C-YJMb6OYuslSin8kNbaLtx6ocbA9Q
+Authorization: Bearer {{token}}
 
 {
   "users": [
