@@ -20,9 +20,7 @@ export class SignInProvider {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly hashingProvider: HashingProvider,
-    private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     private readonly generateTokenProvider: GenerateTokensProvider,
   ) {}
 
@@ -45,14 +43,6 @@ export class SignInProvider {
       throw new UnauthorizedException('Invalid password');
     }
 
-    const activeUser: ActiveUserInterface = { sub: user.id, email: user.email };
-
-    const token = await this.jwtService.signAsync(activeUser, {
-      expiresIn: this.jwtConfiguration.accessTokenTtl,
-      audience: this.jwtConfiguration.audience,
-      issuer: this.jwtConfiguration.issuer,
-      secret: this.jwtConfiguration.secret,
-    });
-    return token;
+    return await this.generateTokenProvider.generateTokens(user);
   }
 }
