@@ -1,11 +1,9 @@
 import {
-  BadRequestException,
   forwardRef,
   Inject,
   Injectable,
   NotFoundException,
   RequestTimeoutException,
-  ServiceUnavailableException,
 } from '@nestjs/common';
 import { GetUsersDto } from '../dtos/get-users.dto';
 import { GetUserDto } from '../dtos/get-user.dto';
@@ -22,6 +20,8 @@ import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 import { CreateUserProvider } from './create-user.provider';
 import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
+import { CreateGoogleUserProvider } from './create-google-user.provider';
+import { GoogleUser } from '../interfaces/google-user.interface';
 
 @Injectable()
 export class UsersService {
@@ -33,6 +33,8 @@ export class UsersService {
    * @param usersCreateManyProvider
    * @param createUserProvider
    * @param findOneUserByEmailProvider
+   * @param findOneUserByGoogleIdProvider
+   * @param createGoogleUserProvider
    */
   constructor(
     @Inject(forwardRef(() => AuthService))
@@ -45,6 +47,7 @@ export class UsersService {
     private readonly createUserProvider: CreateUserProvider,
     private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
     private readonly findOneUserByGoogleIdProvider: FindOneByGoogleIdProvider,
+    private readonly createGoogleUserProvider: CreateGoogleUserProvider,
   ) {}
 
   /**
@@ -98,6 +101,10 @@ export class UsersService {
     return this.createUserProvider.create(createUserDto);
   }
 
+  async createGoogleUser(googleUser: GoogleUser) {
+    return this.createGoogleUserProvider.createGoogleUser(googleUser);
+  }
+
   async createMany(createManyUsersDto: CreateManyUsersDto) {
     return this.usersCreateManyProvider.createMany(createManyUsersDto);
   }
@@ -125,7 +132,7 @@ export class UsersService {
     return this.findOneUserByEmailProvider.findOneByEmail(email);
   }
 
-  public async findOneByGoogleId(googleId: string): Promise<UserEntity> {
+  public async findOneByGoogleId(googleId: string): Promise<UserEntity | null> {
     return this.findOneUserByGoogleIdProvider.findOneByGoogleId(googleId);
   }
 }

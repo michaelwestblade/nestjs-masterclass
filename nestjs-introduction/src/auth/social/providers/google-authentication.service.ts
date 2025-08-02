@@ -47,11 +47,17 @@ export class GoogleAuthenticationService implements OnModuleInit {
     // extract payload
     const payload = loginTicket.getPayload();
 
-    if (!payload || !payload.sub || !payload.email || !payload.name) {
+    if (
+      !payload ||
+      !payload.sub ||
+      !payload.email ||
+      !payload.given_name ||
+      !payload.family_name
+    ) {
       throw new BadRequestException('Invalid token');
     }
 
-    const { email, sub: googleId, name } = payload;
+    const { email, sub: googleId, given_name, family_name } = payload;
 
     // find user in the db
     const user = await this.usersService.findOneByGoogleId(googleId);
@@ -61,11 +67,11 @@ export class GoogleAuthenticationService implements OnModuleInit {
       return this.generateTokensProvider.generateTokens(user);
     } else {
       // if not create a new user and generate tokens
-      const user = await this.usersService.create({
+      const user = await this.usersService.createGoogleUser({
+        googleId,
         email,
-        firstName: name?.split(' ')[0],
-        lastName: name?.split(' ')[1],
-        password: '',
+        firstName: given_name,
+        lastName: family_name,
       });
       return this.generateTokensProvider.generateTokens(user);
     }

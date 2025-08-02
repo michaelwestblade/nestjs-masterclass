@@ -4,7 +4,7 @@ import React from "react";
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId="73028571094-ok0geg8ovenb4bv3ash97eighk41kb77.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="254045443266-ttkv2bu856q8g0psppcjkhieulu73hbe.apps.googleusercontent.com">
       <GoogleLogin
         buttonText="Login"
         onSuccess={(response) => {

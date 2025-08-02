@@ -12,7 +12,6 @@ import { GenerateTokensProvider } from './providers/generate-tokens.provider';
 import { RefreshTokenProvider } from './providers/refresh-token.provider';
 import { GoogleAuthenticationController } from './social/google-authentication.controller';
 import { GoogleAuthenticationService } from './social/providers/google-authentication.service';
-import { GoogleAuthenticationService } from './social/providers/google-authentication.service';
 
 @Module({
   controllers: [AuthController, GoogleAuthenticationController],

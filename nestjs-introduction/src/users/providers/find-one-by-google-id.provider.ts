@@ -1,20 +1,16 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class FindOneByGoogleIdProvider {
   constructor(
-    @Inject() private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
-  public async findOneByGoogleId(googleId: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { googleId } });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    return user;
+  public async findOneByGoogleId(googleId: string): Promise<UserEntity | null> {
+    return this.usersRepository.findOne({ where: { googleId } });
   }
 }
