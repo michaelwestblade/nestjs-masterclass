@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { PostEntity } from '../../posts/entities/post.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class UserEntity {
@@ -41,12 +42,14 @@ export class UserEntity {
     length: 96,
     nullable: true,
   })
+  @Exclude()
   password?: string;
 
   @Column({
     type: 'varchar',
     nullable: true,
   })
+  @Exclude()
   googleId?: string;
 
   @CreateDateColumn()
