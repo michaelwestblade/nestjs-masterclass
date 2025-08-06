@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, RequestTimeoutException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import AWS from 'aws-sdk';
 import * as path from 'path';
@@ -11,16 +11,23 @@ export class UploadToAwsProviderService {
   public async fileUpload(file: Express.Multer.File) {
     const s3 = new AWS.S3();
 
-    const uploadResult = await s3
-      .upload({
-        Bucket: this.configService.get('appConfig.awsBucketName') || '',
-        Body: file.buffer,
-        Key: this.generateFilename(file),
-        ContentType: file.mimetype,
-      })
-      .promise();
+    try {
+      const uploadResult = await s3
+        .upload({
+          Bucket: this.configService.get('appConfig.awsBucketName') || '',
+          Body: file.buffer,
+          Key: this.generateFilename(file),
+          ContentType: file.mimetype,
+        })
+        .promise();
 
-    return uploadResult.Location;
+      return uploadResult.Location;
+    } catch (error) {
+      console.log(error);
+      throw new RequestTimeoutException(error, {
+        description: 'Could not upload file to aws',
+      });
+    }
   }
 
   private generateFilename(file: Express.Multer.File) {
