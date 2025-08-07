@@ -8,10 +8,6 @@ import {
 import { SignInDto } from '../dtos/signin.dto';
 import { UsersService } from '../../users/providers/users.service';
 import { HashingProvider } from './hashing.provider';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigType } from '@nestjs/config';
-import jwtConfig from '../config/jwt.config';
-import { ActiveUserInterface } from '../interfaces/active-user.interfaced';
 import { GenerateTokensProvider } from './generate-tokens.provider';
 
 @Injectable()
@@ -20,7 +16,6 @@ export class SignInProvider {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly hashingProvider: HashingProvider,
-    @Inject(jwtConfig.KEY)
     private readonly generateTokenProvider: GenerateTokensProvider,
   ) {}
 

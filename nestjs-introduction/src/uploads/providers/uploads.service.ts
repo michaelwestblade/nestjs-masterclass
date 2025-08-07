@@ -36,7 +36,7 @@ export class UploadsService {
       // store file url in db
       const uploadFile: UploadFile = {
         name,
-        path: `https://${this.configService.get('appConfig.awsCloudfrontUrl')}/${name}`,
+        path: `https://${this.configService.get('app.awsCloudfrontUrl')}/${name}`,
         type: FileTypes.IMAGE,
         mimetype: file.mimetype,
         size: file.size,

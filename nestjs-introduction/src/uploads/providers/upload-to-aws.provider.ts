@@ -1,20 +1,29 @@
 import { Injectable, RequestTimeoutException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import AWS from 'aws-sdk';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { S3 } from 'aws-sdk';
 
 @Injectable()
 export class UploadToAwsProvider {
   constructor(private readonly configService: ConfigService) {}
 
   public async fileUpload(file: Express.Multer.File) {
-    const s3 = new AWS.S3();
+    const secretAccessKey =
+      this.configService.get('app.awsSecretAccessKey') || '';
+    const accessKeyId = this.configService.get('app.awsAccessKeyId') || '';
+    const s3 = new S3({
+      credentials: {
+        secretAccessKey: secretAccessKey,
+        accessKeyId: accessKeyId,
+      },
+    });
+    const bucket = this.configService.get('app.awsBucketName') || '';
 
     try {
       const uploadResult = await s3
         .upload({
-          Bucket: this.configService.get('appConfig.awsBucketName') || '',
+          Bucket: bucket,
           Body: file.buffer,
           Key: this.generateFilename(file),
           ContentType: file.mimetype,
