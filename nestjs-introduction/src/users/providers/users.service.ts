@@ -1,6 +1,4 @@
 import {
-  forwardRef,
-  Inject,
   Injectable,
   NotFoundException,
   RequestTimeoutException,
@@ -9,12 +7,9 @@ import { GetUsersDto } from '../dtos/get-users.dto';
 import { GetUserDto } from '../dtos/get-user.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
-import { AuthService } from '../../auth/providers/auth.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
-import ProfileConfig from '../config/profile.config';
-import { ConfigType } from '@nestjs/config';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 import { CreateUserProvider } from './create-user.provider';
@@ -37,12 +32,8 @@ export class UsersService {
    * @param createGoogleUserProvider
    */
   constructor(
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
-    @Inject(ProfileConfig.KEY)
-    private readonly profileConfig: ConfigType<typeof ProfileConfig>,
     private readonly usersCreateManyProvider: UsersCreateManyProvider,
     private readonly createUserProvider: CreateUserProvider,
     private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
@@ -55,10 +46,6 @@ export class UsersService {
    * @param getUsersDto
    */
   async findAll(getUsersDto: GetUsersDto) {
-    const profileApiKey = this.profileConfig.apiKey;
-
-    console.log(profileApiKey);
-
     const users = await this.usersRepository.findBy({
       email: getUsersDto.email,
     });
