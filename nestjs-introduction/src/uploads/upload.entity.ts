@@ -8,7 +8,7 @@ import {
 import { FileTypes } from './enums/file-types.enum';
 
 @Entity()
-export class Upload {
+export class UploadEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

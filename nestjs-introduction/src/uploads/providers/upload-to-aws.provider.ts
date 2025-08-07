@@ -5,7 +5,7 @@ import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
-export class UploadToAwsProviderService {
+export class UploadToAwsProvider {
   constructor(private readonly configService: ConfigService) {}
 
   public async fileUpload(file: Express.Multer.File) {
@@ -21,7 +21,7 @@ export class UploadToAwsProviderService {
         })
         .promise();
 
-      return uploadResult.Location;
+      return uploadResult;
     } catch (error) {
       console.log(error);
       throw new RequestTimeoutException(error, {
