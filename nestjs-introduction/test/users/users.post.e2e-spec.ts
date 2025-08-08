@@ -1,33 +1,35 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { App } from 'supertest/types';
-import { AppModule } from '../../src/app.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { appCreate } from '../../src/app.create';
-import { dropDatabase } from '../helpers/drop-database';
+import { ConfigService } from '@nestjs/config';
+import { dropDatabaseHelper } from '../helpers/drop-database.helper';
+import { bootstrapNestApplication } from '../helpers/bootstrap-nest-application.helper';
 
 describe('[Users] @Post endpoints', () => {
   let app: INestApplication<App>;
   let configService: ConfigService;
+  let httpServer: App;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, ConfigModule],
-      providers: [ConfigService],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app = appCreate(app);
+    app = await bootstrapNestApplication();
     configService = app.get<ConfigService>(ConfigService);
-    await app.init();
+    httpServer = app.getHttpServer();
   });
 
   afterEach(async () => {
-    await dropDatabase(configService);
+    await dropDatabaseHelper(configService);
     await app.close();
   });
 
-  it.todo('/users - Endpoint is public');
+  it('/users - Endpoint is public', () => {
+    return request(httpServer)
+      .post('/users')
+      .send({})
+      .expect(400)
+      .then((res) => {
+        console.log(res.body);
+      });
+  });
   it.todo('/users - firstName is required');
   it.todo('/users - lastName is required');
   it.todo('/users - email is required');
