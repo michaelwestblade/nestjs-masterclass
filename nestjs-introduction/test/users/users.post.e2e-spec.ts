@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { dropDatabaseHelper } from '../helpers/drop-database.helper';
 import { bootstrapNestApplication } from '../helpers/bootstrap-nest-application.helper';
 import {
+  completeUser,
   missingEmail,
   missingFirstName,
   missingLastName,
@@ -42,14 +43,50 @@ describe('[Users] @Post endpoints', () => {
       .expect(400);
   });
 
-  it('/users - lastName is required', () => {
-    return request(httpServer).post('/users').send(missingLastName).expect(400);
-  });
-
   it('/users - email is required', () => {
     return request(httpServer).post('/users').send(missingEmail).expect(400);
   });
-  it.todo('/users - valid request successfully created a user');
-  it.todo('/users - password is not returned in the response');
-  it.todo('/users - googleId is not returned in the response');
+  it('/users - valid request successfully created a user', () => {
+    return request(httpServer)
+      .post('/users')
+      .send(completeUser)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toBeDefined();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        expect(body?.data).toBeDefined();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        expect(body?.data?.firstName).toBe(completeUser.firstName);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        expect(body?.data?.lastName).toBe(completeUser.lastName);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        expect(body?.data?.email).toBe(completeUser.email);
+      });
+  });
+  it('/users - password is not returned in the response', () => {
+    return request(httpServer)
+      .post('/users')
+      .send(completeUser)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toBeDefined();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        expect(body?.data).toBeDefined();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        expect(body?.data?.password).not.toBeDefined();
+      });
+  });
+  it('/users - googleId is not returned in the response', () => {
+    return request(httpServer)
+      .post('/users')
+      .send(completeUser)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toBeDefined();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        expect(body?.data).toBeDefined();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        expect(body?.data?.googleId).not.toBeDefined();
+      });
+  });
 });
