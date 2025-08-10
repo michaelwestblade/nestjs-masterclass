@@ -4,6 +4,11 @@ import { App } from 'supertest/types';
 import { ConfigService } from '@nestjs/config';
 import { dropDatabaseHelper } from '../helpers/drop-database.helper';
 import { bootstrapNestApplication } from '../helpers/bootstrap-nest-application.helper';
+import {
+  missingEmail,
+  missingFirstName,
+  missingLastName,
+} from './users.post.e2e-spec.sample-data';
 
 describe('[Users] @Post endpoints', () => {
   let app: INestApplication<App>;
@@ -30,9 +35,20 @@ describe('[Users] @Post endpoints', () => {
         console.log(res.body);
       });
   });
-  it.todo('/users - firstName is required');
-  it.todo('/users - lastName is required');
-  it.todo('/users - email is required');
+  it('/users - firstName is required', () => {
+    return request(httpServer)
+      .post('/users')
+      .send(missingFirstName)
+      .expect(400);
+  });
+
+  it('/users - lastName is required', () => {
+    return request(httpServer).post('/users').send(missingLastName).expect(400);
+  });
+
+  it('/users - email is required', () => {
+    return request(httpServer).post('/users').send(missingEmail).expect(400);
+  });
   it.todo('/users - valid request successfully created a user');
   it.todo('/users - password is not returned in the response');
   it.todo('/users - googleId is not returned in the response');

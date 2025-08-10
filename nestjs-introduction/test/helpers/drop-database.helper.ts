@@ -7,7 +7,7 @@ export async function dropDatabaseHelper(config: ConfigService) {
     type: 'postgres',
     synchronize: config.get('database.synchronize'),
     port: +config.get('database.port'),
-    username: config.get('database.user'),
+    username: config.get('database.username'),
     password: config.get('database.password'),
     host: config.get('database.host'),
     database: config.get('database.name'),
